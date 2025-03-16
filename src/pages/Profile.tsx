@@ -9,7 +9,7 @@ function Profile() {
   const { user } = useAuth0();
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
 
-  get(`/scores/${currentUser?._id}/`);
+  void get(`/scores/${currentUser?._id}/`);
 
   return (
     <>

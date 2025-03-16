@@ -1,18 +1,23 @@
-export const get = (endpoint: string): Promise<any> => {
-  return fetch(`http://localhost:3000${endpoint}`, {
+export const get = async (endpoint: string): Promise<unknown> => {
+  const response = await fetch(`http://localhost:3000${endpoint}`, {
     method: "GET",
     headers: {
       "content-type": "application/json",
     },
-  }).then((response) => response.json());
+  });
+  return await response.json();
 };
 
-export const post = (endpoint: string, body: any): Promise<any> => {
-  return fetch(`http://localhost:3000${endpoint}`, {
+export const post = async (
+  endpoint: string,
+  body: unknown,
+): Promise<unknown> => {
+  const response = await fetch(`http://localhost:3000${endpoint}`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(body),
-  }).then((response) => response.json());
+  });
+  return await response.json();
 };

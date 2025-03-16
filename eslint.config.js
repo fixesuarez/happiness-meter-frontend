@@ -6,12 +6,21 @@ import tseslint from "typescript-eslint";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default tseslint.config(
-  { ignores: ["dist"] },
+  { ignores: ["dist", "package.json"] },
   {
     extends: [
-      js.configs.recommendedTypeChecked,
-      ...tseslint.configs.recommended,
+      js.configs.recommended,
+      tseslint.configs.recommendedTypeChecked,
       eslintConfigPrettier,
+      {
+        languageOptions: {
+          parserOptions: {
+            projectService: true,
+            tsconfigRootDir: import.meta.dirname,
+          },
+        },
+      },
+      // eslintConfigPrettier,
     ],
     files: ["**/*.{ts,tsx}"],
     languageOptions: {

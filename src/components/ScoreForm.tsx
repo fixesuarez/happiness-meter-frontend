@@ -102,7 +102,7 @@ export default function ScoreForm() {
   const formatDate = (date: dayjs.Dayjs) => date.format("DD/MM");
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={void handleSubmit(onSubmit)}>
       <TitleContainer>
         <FormTitle>Note de la semaine</FormTitle>
         <Subtitle>

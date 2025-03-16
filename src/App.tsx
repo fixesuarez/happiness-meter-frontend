@@ -21,22 +21,25 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isLoading) return;
+    const fetchData = async (): Promise<void> => {
+      if (isLoading) return;
 
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    if (user) {
-      post("/users/get_or_create/", {
-        email: user.email,
-        name: user.given_name,
-      }).then((currentUser: User) => {
+      if (!isAuthenticated) {
+        await navigate("/login");
+        return;
+      }
+      if (user) {
+        const currentUser: User = (await post("/users/get_or_create/", {
+          email: user.email,
+          name: user.given_name,
+        })) as User;
         dispatch(updateCurrentUser(currentUser));
-        navigate("/profile");
-      });
-    }
-  }, [isLoading]);
+        await navigate("/profile");
+      }
+    };
+
+    void fetchData();
+  });
 
   return (
     <>

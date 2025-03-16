@@ -6,12 +6,15 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint '.'",
     "preview": "vite preview",
     "prepare": "husky"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": [
+      "prettier --write --ignore-unknown",
+      "eslint --max-warnings 0 --no-warn-ignored ."
+    ]
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
