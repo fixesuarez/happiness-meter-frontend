@@ -20,16 +20,20 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (!isLoading) {
-      isAuthenticated ? navigate('/profile') : navigate('/login')
-      if (user) {
-        post("/users/get_or_create/", {
-          email: user.email,
-          name: user.given_name
-        }).then((currentUser: User) => {
-          dispatch(updateCurrentUser(currentUser))
-        })
-      }
+    if (isLoading) return
+
+    if (!isAuthenticated) {
+      navigate('/login')
+      return
+    }
+    if (user) {
+      post("/users/get_or_create/", {
+        email: user.email,
+        name: user.given_name
+      }).then((currentUser: User) => {
+        dispatch(updateCurrentUser(currentUser))
+        navigate('/profile')
+      })
     }
   }, [isLoading])
 
