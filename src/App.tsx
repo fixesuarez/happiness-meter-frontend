@@ -34,7 +34,6 @@ function App() {
           name: user.given_name,
         })) as User;
         dispatch(updateCurrentUser(currentUser));
-        await navigate("/profile");
       }
     };
 

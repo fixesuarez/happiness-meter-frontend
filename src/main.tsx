@@ -15,8 +15,9 @@ createRoot(document.getElementById("root")!).render(
     clientId={import.meta.env.VITE_OAUTH_CLIENT_ID}
     useRefreshTokens={true}
     authorizationParams={{
-      redirect_uri: window.location.origin,
+      redirect_uri: `${window.location.origin}/profile`,
     }}
+    cacheLocation="localstorage"
   >
     <Provider store={store}>
       <BrowserRouter>
