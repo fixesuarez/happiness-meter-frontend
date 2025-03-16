@@ -39,7 +39,7 @@ function App() {
     };
 
     void fetchData();
-  });
+  }, [isLoading]);
 
   return (
     <>

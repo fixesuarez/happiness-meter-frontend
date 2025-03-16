@@ -11,8 +11,8 @@ import App from "@/App.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <Auth0Provider
-    domain="dev-7c3z7c4axhb7p07l.eu.auth0.com"
-    clientId="pTTPg6upVzLAwLAAYOntnFPs4C39N1lz"
+    domain={import.meta.env.VITE_OAUTH_DOMAIN}
+    clientId={import.meta.env.VITE_OAUTH_CLIENT_ID}
     useRefreshTokens={true}
     authorizationParams={{
       redirect_uri: window.location.origin,
