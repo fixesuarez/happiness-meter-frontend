@@ -19,6 +19,7 @@
   "dependencies": {
     "@auth0/auth0-react": "^2.3.0",
     "@reduxjs/toolkit": "^2.6.1",
+    "chart.js": "^4.4.8",
     "dayjs": "^1.11.13",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.2",

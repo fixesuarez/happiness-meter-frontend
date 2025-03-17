@@ -7,6 +7,9 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import ScoreChart from "@/components/ScoreChart";
+import dayjs from "dayjs";
+import { DatasetInput } from "@/models/chart";
 
 function Profile() {
   const { user } = useAuth0();
@@ -15,6 +18,9 @@ function Profile() {
 
   const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
 
+  const [labels, setLabels] = useState<string[]>();
+  const [datasetInput, setDatasetInput] = useState<DatasetInput[]>();
+
   useEffect(() => {
     if (!currentUser) return;
     get(`/scores/${currentUser?._id}/`)
@@ -22,6 +28,16 @@ function Profile() {
         if (typeof scores.at(-1)?.score !== "number") {
           setIsFormVisible(true);
         }
+
+        setDatasetInput([
+          {
+            data: scores.map((score) => score.score),
+            label: "Moi",
+          },
+        ]);
+        setLabels(
+          scores.map((score) => dayjs(score.date).format("DD/MM/YYYY")),
+        );
       })
       .catch(() => {
         errorToast.current?.show({
@@ -37,6 +53,7 @@ function Profile() {
     <>
       {user && <ProfileCard user={user} />}
       {isFormVisible && <ScoreForm />}
+      <ScoreChart labels={labels} datasets={datasetInput} />
       <Toast ref={errorToast} />
     </>
   );
