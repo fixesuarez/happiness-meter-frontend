@@ -75,15 +75,20 @@ export default function ScoreForm() {
       comment: undefined,
     },
   });
+
+  const preventDefaultAndSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    void handleSubmit(onSubmit)();
+  };
   const onSubmit: SubmitHandler<ScoreForm> = async (data) => {
     setIsScoreRequestPending(true);
     const payload = {
       ...data,
-      date: lastSunday.format("DD/MM/YYYY"),
+      date: lastSunday.startOf("day").toDate(),
       user_id: currentUser?._id,
     };
     try {
-      await post("/score", payload);
+      await post("/scores/", payload);
     } catch {
       errorToast.current?.show({
         severity: "error",
@@ -102,7 +107,7 @@ export default function ScoreForm() {
   const formatDate = (date: dayjs.Dayjs) => date.format("DD/MM");
 
   return (
-    <Form onSubmit={void handleSubmit(onSubmit)}>
+    <Form onSubmit={preventDefaultAndSubmit}>
       <TitleContainer>
         <FormTitle>Note de la semaine</FormTitle>
         <Subtitle>

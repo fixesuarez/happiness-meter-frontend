@@ -1,4 +1,6 @@
-export const get = async (endpoint: string): Promise<unknown> => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+export const get = async (endpoint: string): Promise<any> => {
   const response = await fetch(`http://localhost:3000${endpoint}`, {
     method: "GET",
     headers: {
@@ -8,10 +10,7 @@ export const get = async (endpoint: string): Promise<unknown> => {
   return await response.json();
 };
 
-export const post = async (
-  endpoint: string,
-  body: unknown,
-): Promise<unknown> => {
+export const post = async (endpoint: string, body: any): Promise<any> => {
   const response = await fetch(`http://localhost:3000${endpoint}`, {
     method: "POST",
     headers: {
