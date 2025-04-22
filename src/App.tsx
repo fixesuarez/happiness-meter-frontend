@@ -12,7 +12,9 @@ import { updateCurrentUser } from "./store/userSlice";
 import { User } from "./models/user";
 
 const ContentLayout = styled.div`
+  margin: 0 auto;
   padding: 16px;
+  max-width: 1280px;
 `;
 
 function App() {
@@ -34,6 +36,7 @@ function App() {
           name: user.given_name,
         })) as User;
         dispatch(updateCurrentUser(currentUser));
+        await navigate("/profile");
       }
     };
 

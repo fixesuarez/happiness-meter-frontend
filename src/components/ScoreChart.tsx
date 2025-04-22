@@ -22,7 +22,7 @@ export default function ScoreChart({ labels, datasets }: ChartProps) {
   };
   const options = {
     maintainAspectRatio: false,
-    aspectRatio: 0.6,
+    aspectRatio: 0.8,
     interactions: {
       mode: "x",
     },
