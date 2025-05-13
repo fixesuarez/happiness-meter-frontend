@@ -7,24 +7,21 @@ const fetchWrapper = async (
   endpoint: string,
   body?: any,
 ): Promise<any> => {
-  const response = await fetch(`http://localhost:3000${endpoint}`, {
-    method: method,
-    headers: {
-      "content-type": "application/json",
+  const response = await fetch(
+    `${import.meta.env.VITE_SERVER_URL}${endpoint}`,
+    {
+      method: method,
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(body),
     },
-    body: JSON.stringify(body),
-  });
+  );
   return await response.json();
 };
 
 export const get = async (endpoint: string): Promise<any> => {
-  const response = await fetch(`http://localhost:3000${endpoint}`, {
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  });
-  return await response.json();
+  return fetchWrapper("GET", endpoint);
 };
 
 export const post = async (endpoint: string, body: any): Promise<any> => {
