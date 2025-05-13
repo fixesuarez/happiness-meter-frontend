@@ -1,5 +1,6 @@
 import ProfileCard from "@/components/ProfileCard";
-import ScoreForm from "@/components/ScoreForm";
+import ScoreTable from "@/components/ScoreTable";
+import ScoreForm from "@/components/scoreForm/ScoreForm";
 import { UserScore } from "@/models/score";
 import { RootState } from "@/store";
 import { get } from "@/utils/httpWrapper";
@@ -18,6 +19,7 @@ function Profile() {
 
   const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
 
+  const [scores, setScores] = useState<UserScore[]>();
   const [labels, setLabels] = useState<string[]>();
   const [datasetInput, setDatasetInput] = useState<DatasetInput[]>();
 
@@ -29,6 +31,7 @@ function Profile() {
           setIsFormVisible(true);
         }
 
+        setScores(scores);
         setDatasetInput([
           {
             data: scores.map((score) => score.score),
@@ -52,8 +55,11 @@ function Profile() {
   return (
     <>
       {user && <ProfileCard user={user} />}
-      {isFormVisible && <ScoreForm />}
+      {isFormVisible && (
+        <ScoreForm onFormClose={() => setIsFormVisible(false)} />
+      )}
       <ScoreChart labels={labels} datasets={datasetInput} />
+      {scores && <ScoreTable scores={scores} />}
       <Toast ref={errorToast} />
     </>
   );
