@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { HttpError } from "./errors/HttpError";
+
 type HttpMethod = "GET" | "POST" | "PATCH";
 
 const fetchWrapper = async (
@@ -7,17 +9,30 @@ const fetchWrapper = async (
   endpoint: string,
   body?: any,
 ): Promise<any> => {
-  const response = await fetch(
-    `${import.meta.env.VITE_SERVER_URL}${endpoint}`,
-    {
-      method: method,
-      headers: {
-        "content-type": "application/json",
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_SERVER_URL}${endpoint}`,
+      {
+        method: method,
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(body),
       },
-      body: JSON.stringify(body),
-    },
-  );
-  return await response.json();
+    );
+
+    if (!response.ok) {
+      throw new HttpError({
+        message: `HTTP error! status: ${response.status}`,
+        status: response.status,
+        body: (await response.json()) as Record<string, unknown>,
+      });
+    }
+
+    return await response.json();
+  } catch {
+    throw new Error("Error in fetchWrapper");
+  }
 };
 
 export const get = async (endpoint: string): Promise<any> => {
