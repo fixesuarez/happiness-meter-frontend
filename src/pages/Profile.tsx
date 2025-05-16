@@ -9,7 +9,6 @@ import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ScoreChart from "@/components/ScoreChart";
-import dayjs from "dayjs";
 import { DatasetInput } from "@/models/chart";
 
 function Profile() {
@@ -38,9 +37,7 @@ function Profile() {
             label: "Moi",
           },
         ]);
-        setLabels(
-          scores.map((score) => dayjs(score.date).format("DD/MM/YYYY")),
-        );
+        setLabels(scores.map((score) => score.date));
       })
       .catch(() => {
         errorToast.current?.show({

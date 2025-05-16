@@ -6,6 +6,6 @@ export interface UserScore {
 }
 
 export type UserScorePayload = Omit<UserScore, "date"> & {
-  date: Date;
+  date: string;
   user_id?: string;
 };

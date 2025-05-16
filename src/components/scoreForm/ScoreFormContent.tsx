@@ -72,7 +72,7 @@ export default function ScoreFormContent({
     setIsScoreRequestPending(true);
     const payload: UserScorePayload = {
       ...data,
-      date: lastSunday.startOf("day").toDate(),
+      date: lastSunday.format("DD-MM-YYYY"),
       user_id: currentUser?._id,
     };
     try {

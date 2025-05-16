@@ -2,6 +2,7 @@ import { DataTable, DataTableDataSelectableEvent } from "primereact/datatable";
 import { UserScore, UserScorePayload } from "@/models/score";
 import { Column, ColumnEditorOptions, ColumnEvent } from "primereact/column";
 import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import {
   InputNumber,
   InputNumberValueChangeEvent,
@@ -11,13 +12,15 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { createOrUpdateScore } from "@/services/scores";
 
+dayjs.extend(customParseFormat);
+
 export default function ScoreTable({ scores }: { scores: UserScore[] }) {
   const isCellSelectable = (event: DataTableDataSelectableEvent): boolean => {
     return event.data.field === "comment";
   };
 
   const scorePeriodTemplate = (userScore: UserScore) => {
-    const endDate = dayjs(userScore.date);
+    const endDate = dayjs(userScore.date, "DD-MM-YYYY", true);
     const startDate = endDate.subtract(6, "days");
     return (
       <>
@@ -79,7 +82,6 @@ export default function ScoreTable({ scores }: { scores: UserScore[] }) {
 
     const payload: UserScorePayload = {
       ...rowData,
-      date: new Date(rowData.date),
       user_id: currentUser?._id,
     };
     void createOrUpdateScore(payload);
