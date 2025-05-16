@@ -47,7 +47,6 @@ export default function ScoreChart({ labels, datasets }: ChartProps) {
         },
       },
       y: {
-        max: 10,
         min: 0,
         ticks: {
           color: textColorSecondary,
