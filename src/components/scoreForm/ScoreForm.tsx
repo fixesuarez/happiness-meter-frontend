@@ -23,9 +23,9 @@ const FulfilledContainer = styled.div`
 `;
 
 export default function ScoreForm({
-  onFormClose,
+  setIsFormVisible,
 }: {
-  onFormClose: () => void;
+  setIsFormVisible: (val: boolean) => void;
 }) {
   const [isFormFulfilled, setIsFormFulfilled] = useState<boolean>(false);
 
@@ -34,7 +34,7 @@ export default function ScoreForm({
   const formFulfilledContent = (
     <FulfilledContainer>
       <p>Merci chacal c'est noté !</p>
-      <Button onClick={onFormClose} type="button">
+      <Button onClick={() => setIsFormVisible(false)} type="button">
         Fermer
       </Button>
     </FulfilledContainer>

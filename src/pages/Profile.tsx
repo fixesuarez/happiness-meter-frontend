@@ -10,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import ScoreChart from "@/components/ScoreChart";
 import { DatasetInput } from "@/models/chart";
+import { useScoreStore } from "@/store/scores";
 
 function Profile() {
   const { user } = useAuth0();
@@ -18,9 +19,11 @@ function Profile() {
 
   const [isFormVisible, setIsFormVisible] = useState<boolean>(false);
 
-  const [scores, setScores] = useState<UserScore[]>();
   const [labels, setLabels] = useState<string[]>();
   const [datasetInput, setDatasetInput] = useState<DatasetInput[]>();
+
+  const scores = useScoreStore((state) => state.scores);
+  const setScores = useScoreStore((state) => state.setScores);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -52,9 +55,7 @@ function Profile() {
   return (
     <>
       {user && <ProfileCard user={user} />}
-      {isFormVisible && (
-        <ScoreForm onFormClose={() => setIsFormVisible(false)} />
-      )}
+      {isFormVisible && <ScoreForm setIsFormVisible={setIsFormVisible} />}
       <ScoreChart labels={labels} datasets={datasetInput} />
       {scores && <ScoreTable scores={scores} />}
       <Toast ref={errorToast} />
