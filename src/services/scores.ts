@@ -1,5 +1,5 @@
 import { UserScore, UserScorePayload } from "@/models/score";
-import { post, patch } from "@/utils/httpWrapper";
+import { post, patch, get } from "@/utils/httpWrapper";
 
 export const createOrUpdateScore = async (scorePayload: UserScorePayload) => {
   const httpMethod = scorePayload._id ? patch : post;
@@ -12,3 +12,6 @@ export const createOrUpdateScore = async (scorePayload: UserScorePayload) => {
     throw new Error("Error while sending score");
   }
 };
+
+export const getScores = async (userId: string) =>
+  (await get(`/scores/${userId}/`)) as UserScore[];

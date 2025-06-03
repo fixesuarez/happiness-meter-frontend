@@ -11,10 +11,15 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { createOrUpdateScore } from "@/services/scores";
+import { useScoreStore } from "@/store/scores";
+import { useMemo } from "react";
 
 dayjs.extend(customParseFormat);
 
-export default function ScoreTable({ scores }: { scores: UserScore[] }) {
+export default function ScoreTable() {
+  const scores = useScoreStore((state) => state.scores);
+  const reverseScores = useMemo(() => [...scores].reverse(), [scores]);
+
   const isCellSelectable = (event: DataTableDataSelectableEvent): boolean => {
     return event.data.field === "comment";
   };
@@ -66,6 +71,8 @@ export default function ScoreTable({ scores }: { scores: UserScore[] }) {
 
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const onCellEditComplete = (e: ColumnEvent) => {
+    if (!currentUser) return;
+
     const rowData = e.rowData as UserScore;
     const newRowData = e.newRowData as UserScore;
     if (e.field === "score" && typeof e.newValue === "number") {
@@ -82,15 +89,21 @@ export default function ScoreTable({ scores }: { scores: UserScore[] }) {
 
     const payload: UserScorePayload = {
       ...rowData,
-      user_id: currentUser?._id,
+      user_id: currentUser._id,
     };
-    void createOrUpdateScore(payload);
+    createOrUpdateScore(payload)
+      .then(() => {
+        void useScoreStore.getState().getScores(currentUser._id);
+      })
+      .catch(() => {
+        // Todo: handle error
+      });
   };
 
   return (
     <>
       <DataTable
-        value={scores.reverse()}
+        value={reverseScores}
         style={{ fontSize: "0.8em" }}
         editMode="cell"
         isDataSelectable={isCellSelectable}

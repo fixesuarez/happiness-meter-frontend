@@ -3,7 +3,6 @@ import ScoreTable from "@/components/ScoreTable";
 import ScoreForm from "@/components/scoreForm/ScoreForm";
 import { UserScore } from "@/models/score";
 import { RootState } from "@/store";
-import { get } from "@/utils/httpWrapper";
 import { useAuth0 } from "@auth0/auth0-react";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
@@ -23,24 +22,15 @@ function Profile() {
   const [datasetInput, setDatasetInput] = useState<DatasetInput[]>();
 
   const scores = useScoreStore((state) => state.scores);
-  const setScores = useScoreStore((state) => state.setScores);
+  const getScores = useScoreStore((state) => state.getScores);
 
   useEffect(() => {
     if (!currentUser) return;
-    get(`/scores/${currentUser?._id}/`)
+    getScores(currentUser._id)
       .then((scores: UserScore[]) => {
         if (typeof scores.at(-1)?.score !== "number") {
           setIsFormVisible(true);
         }
-
-        setScores(scores);
-        setDatasetInput([
-          {
-            data: scores.map((score) => score.score),
-            label: "Moi",
-          },
-        ]);
-        setLabels(scores.map((score) => score.date));
       })
       .catch(() => {
         errorToast.current?.show({
@@ -51,13 +41,22 @@ function Profile() {
         });
       });
   }, [currentUser]);
+  useEffect(() => {
+    setDatasetInput([
+      {
+        data: scores.map((score) => score.score),
+        label: "Moi",
+      },
+    ]);
+    setLabels(scores.map((score) => score.date));
+  }, [scores]);
 
   return (
     <>
       {user && <ProfileCard user={user} />}
       {isFormVisible && <ScoreForm setIsFormVisible={setIsFormVisible} />}
       <ScoreChart labels={labels} datasets={datasetInput} />
-      {scores && <ScoreTable scores={scores} />}
+      {scores && <ScoreTable />}
       <Toast ref={errorToast} />
     </>
   );

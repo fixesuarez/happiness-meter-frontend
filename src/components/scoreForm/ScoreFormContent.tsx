@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import dayjs from "dayjs";
 import { Toast } from "primereact/toast";
+import { useScoreStore } from "@/store/scores";
 
 const Form = styled.form`
   display: flex;
@@ -53,6 +54,7 @@ export default function ScoreFormContent({
     useState<boolean>(false);
   const currentUser = useSelector((state: RootState) => state.user.currentUser);
   const errorToast = useRef<Toast>(null);
+  const getScores = useScoreStore((state) => state.getScores);
 
   const {
     handleSubmit,
@@ -76,7 +78,9 @@ export default function ScoreFormContent({
       user_id: currentUser?._id,
     };
     try {
+      if (!currentUser) return;
       await createOrUpdateScore(payload);
+      await getScores(currentUser?._id);
       setIsFormFulfilled(true);
     } catch {
       errorToast.current?.show({
