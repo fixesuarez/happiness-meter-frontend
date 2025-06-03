@@ -46,3 +46,19 @@ export const post = async (endpoint: string, body: any): Promise<any> => {
 export const patch = async (endpoint: string, body: any): Promise<any> => {
   return fetchWrapper("PATCH", endpoint, body);
 };
+
+export const postToExternalService = (url: string, body: any) => {
+  fetch(url, {
+    body: JSON.stringify(body),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  })
+    .then(function (res) {
+      console.log(res);
+    })
+    .catch(function (res) {
+      console.log(res);
+    });
+};

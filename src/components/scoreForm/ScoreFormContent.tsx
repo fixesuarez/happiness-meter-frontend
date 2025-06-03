@@ -14,6 +14,7 @@ import { RootState } from "@/store";
 import dayjs from "dayjs";
 import { Toast } from "primereact/toast";
 import { useScoreStore } from "@/store/scores";
+import { sendScoreOnDiscord } from "@/services/discord";
 
 const Form = styled.form`
   display: flex;
@@ -79,8 +80,9 @@ export default function ScoreFormContent({
     };
     try {
       if (!currentUser) return;
-      await createOrUpdateScore(payload);
+      const score = await createOrUpdateScore(payload);
       await getScores(currentUser?._id);
+      void sendScoreOnDiscord(currentUser, score);
       setIsFormFulfilled(true);
     } catch {
       errorToast.current?.show({
