@@ -56,7 +56,7 @@ function Profile() {
       {user && <ProfileCard user={user} />}
       {isFormVisible && <ScoreForm setIsFormVisible={setIsFormVisible} />}
       <ScoreChart labels={labels} datasets={datasetInput} />
-      {scores && <ScoreTable />}
+      <ScoreTable />
       <Toast ref={errorToast} />
     </>
   );
